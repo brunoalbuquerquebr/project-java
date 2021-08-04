@@ -1,7 +1,12 @@
-package br.com.caelum.carangobom.brand;
+package br.com.caelum.carangobom.controller;
 
+import br.com.caelum.carangobom.domain.Brand;
+import br.com.caelum.carangobom.form.BrandForm;
+import br.com.caelum.carangobom.repository.BrandRepository;
+import br.com.caelum.carangobom.service.BrandService;
 import br.com.caelum.carangobom.validacao.ErroDeParametroOutputDto;
 import br.com.caelum.carangobom.validacao.ListaDeErrosOutputDto;
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +27,16 @@ import java.util.Optional;
 public class BrandController {
 
     @Autowired
+    private BrandService brandsService;
+
+    @Autowired
     private BrandRepository brandRepository;
 
     @GetMapping()
     @ResponseBody
     @Transactional
-    public List<Brand> list() {
-        return brandRepository.findAll();
+    public ResponseEntity<List<BrandForm>> list() {
+        return new ResponseEntity<>(brandsService.findAll(), null, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -95,4 +103,5 @@ public class BrandController {
         l2.setErros(l);
         return l2;
     }
+
 }
