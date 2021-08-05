@@ -1,5 +1,8 @@
-package br.com.caelum.carangobom.brand;
+package br.com.caelum.carangobom.controller;
 
+import br.com.caelum.carangobom.form.BrandForm;
+import br.com.caelum.carangobom.repository.BrandRepository;
+import br.com.caelum.carangobom.service.BrandService;
 import br.com.caelum.carangobom.validacao.ErroDeParametroOutputDto;
 import br.com.caelum.carangobom.validacao.ListaDeErrosOutputDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,17 +12,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/brands")
 public class BrandController {
+
+    @Autowired
+    private BrandService brandsService;
 
     @Autowired
     private BrandRepository brandRepository;
@@ -27,56 +30,50 @@ public class BrandController {
     @GetMapping()
     @ResponseBody
     @Transactional
-    public List<Brand> list() {
-        return brandRepository.findAll();
+    public ResponseEntity<List<BrandForm>> listBrand() {
+        return new ResponseEntity<>(brandsService.findAll(), null, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> id(@PathVariable Long id) {
-        Optional<Brand> m1 = brandRepository.findById(id);
-        if (m1.isPresent()) {
-            return ResponseEntity.ok(m1.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<BrandForm> listBrandById(@PathVariable Long id) {
+        BrandForm brandForm = brandsService.findById(id);
+        if(brandForm != null) {
+            return new ResponseEntity<>(brandForm, null, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(brandForm, null, HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping()
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> cadastra(@Valid @RequestBody Brand m1, UriComponentsBuilder uriBuilder) {
-        Brand m2 = brandRepository.save(m1);
-        URI h = uriBuilder.path("/brands/{id}").buildAndExpand(m1.getId()).toUri();
-        return ResponseEntity.created(h).body(m2);
+    public ResponseEntity<BrandForm> createBrand(@Valid @RequestBody BrandForm brandForm) {
+        return new ResponseEntity<>(brandsService.saveBrand(brandForm), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> altera(@PathVariable Long id, @Valid @RequestBody Brand m1) {
-        Optional<Brand> m2 = brandRepository.findById(id);
-        if (m2.isPresent()) {
-            Brand m3 = m2.get();
-            m3.setName(m1.getName());
-            return ResponseEntity.ok(m3);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<BrandForm> updateBrand(@PathVariable long id,  @Valid @RequestBody BrandForm brandForm) {
+        BrandForm brand = brandsService.updateBrand(id, brandForm);
+        if(brand != null) {
+            return new ResponseEntity<>(brand, null, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(brand, null, HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Brand> deleta(@PathVariable Long id) {
-        Optional<Brand> m1 = brandRepository.findById(id);
-        if (m1.isPresent()) {
-            Brand m2 = m1.get();
-            brandRepository.delete(m2);
-            return ResponseEntity.ok(m2);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<BrandForm> deleteBrand(@PathVariable Long id) {
+        BrandForm brand = brandsService.deleteBrand(id);
+        if (brand != null) {
+            return new ResponseEntity<>(brand, null, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(brand, null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -95,4 +92,5 @@ public class BrandController {
         l2.setErros(l);
         return l2;
     }
+
 }
