@@ -1,6 +1,8 @@
 package br.com.caelum.carangobom.form;
 
 import br.com.caelum.carangobom.domain.Brand;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Getter
+@Setter
 public class BrandForm {
 
     private Long id;
@@ -37,19 +41,19 @@ public class BrandForm {
         return brandDom;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 }
