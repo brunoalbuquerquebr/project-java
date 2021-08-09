@@ -91,10 +91,17 @@ class BrandControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-
     @Test
     @Order(8)
-    void deleteCourseNull() {
+    void deleteVehicle() {
+        Integer id = 1;
+        ResponseEntity<BrandForm> response = brandController.deleteBrand(id.longValue());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(9)
+    void deleteVehicleNull() {
         Integer id = 9;
         ResponseEntity<BrandForm> response = brandController.deleteBrand(id.longValue());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
