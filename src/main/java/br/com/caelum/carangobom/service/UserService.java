@@ -7,9 +7,10 @@ import java.util.List;
 
 @Service
 public interface UserService {
+
     public UserForm saveUser(UserForm userForm);
 
-    public List<UserForm> findAllByOrderByNomeBrand();
+    public List<UserForm> findAllByOrderByNameBrand();
 
     public UserForm removeUser(Long id);
 }

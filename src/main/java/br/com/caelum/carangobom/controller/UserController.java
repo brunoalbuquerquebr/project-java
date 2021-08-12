@@ -15,6 +15,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -23,7 +24,7 @@ public class UserController {
     @ResponseBody
     @Transactional
     public List<UserForm> listUser() {
-        return userService.findAllByOrderByNomeBrand();
+        return userService.findAllByOrderByNameBrand();
     }
 
     @PostMapping()
